@@ -1,0 +1,180 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>旋转木马轮播图</title>
+        <style>
+            #wrap {
+                margin: 100px auto;
+                margin-bottom: 50px;
+                position: relative;
+                width: 1000px;
+                height: 333px;
+            }
+            ul{
+                list-style: none;
+                display: flex;
+                position: relative;
+            }
+            li {
+                position: absolute;
+            }
+            img {
+                width: 100%;
+                border-radius: 20px;
+                transition:id 2s;
+            }
+            #dots {
+                text-align: center;
+            }
+            #dots span {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border-radius: 100%;
+                background-color: gray;
+                margin: 5px;
+            }
+            #dots #center {
+                background-color: pink;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <ul id="pic">
+                <li id="pic1"><img src="img/1.jpg"></li>
+                <li id="pic2"><img src="img/2.jpg"></li>
+                <li id="pic3"><img src="img/3.jpg"></li>
+                <li id="pic4"><img src="img/4.jpg"></li>
+                <li id="pic5"><img src="img/5.jpg"></li>
+            </ul>
+        </div>
+        <div id="dots">
+            <span></span>
+            <span></span>
+            <span id="center"></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <script>
+            var json = [
+                {
+                    left: 0,
+                    top: 100,
+                    zIndex: 1,
+                    width: 200,
+                    height: 133,
+                },{
+                    left: 100,
+                    top: 66.5,
+                    zIndex: 2,
+                    width: 300,
+                    height: 200,
+                },{
+                    left: 250,
+                    top: 0,
+                    zIndex: 3,
+                    width: 500,
+                    height: 333,
+                },{
+                    left: 600,
+                    top: 66.5,
+                    zIndex: 2,
+                    width: 300,
+                    height: 200,
+                },{
+                    left: 800,
+                    top: 100,
+                    zIndex: 1,
+                    width: 200,
+                    height: 133,
+                }
+            ];
+        //封装动画
+            function animate(ele,json){
+            //清理计时
+                clearInterval(ele.timer);
+                var isStop = false;
+                ele.timer = setInterval(
+                    function(){
+                        isStop = true;
+                    //遍历json中的属性
+                        for(var key in json){
+                        //定义ele目前的属性值current，和想要达到的属性值target
+                            var target = json[key];
+                            var current;
+                            current = parseInt(ele.style[key]);
+                        //计算每次所走的步数，并处理成整数
+                            var step = (target - current)/10;
+                            step = step > 0 ? Math.ceil(step) : Math.floor(step);
+                            current = current + step;
+                        //判断是否停止
+                            if (Math.abs(target-current) > Math.abs(step)) {
+                                isStop = false;
+                            } 
+                            else {
+                                current = target;
+                            }
+                        //停止后将属性值后面加上px
+                            if (key == 'zIndex'){
+                                ele.style.zIndex = Math.round(current);
+                            } else {
+                                ele.style[key] = current + 'px';
+                            }  
+                        }
+                        if(isStop) clearInterval(ele.timer);
+                    },10
+                )
+            }
+        //开始轮播
+            var li = document.getElementsByTagName("li");
+            var span = document.getElementsByTagName("span");
+            for(let i = 0;i < li.length;i++){
+                animate(li[i],json[i]);
+            }
+        //改变图片位置函数
+            function change(index){
+                for(let i = 0;i < li.length;i++){
+                    let temp = i + index;
+                    if(temp > 4) temp = temp - 5;
+                    if(temp < 0) temp = temp + 5;
+                    animate(li[i],json[temp]);
+                //改变小圆点颜色
+                    if(temp == 2) span[i].id = "center";
+                    else span[i].id = "";
+                }
+            }
+        
+        //自动轮播
+            var count = 1;
+            function auto(){
+                change(count);
+                count++;
+                console.log(count)
+                if(count == 6) count = 1;
+            }
+            var changeimg = setInterval("auto()",3000);
+        //鼠标滑过时停止自动轮播
+            var ul = document.getElementsByTagName("ul");
+            ul[0].onmouseover = function(){
+                clearInterval(changeimg);
+            }
+            ul[0].onmouseout = function(){
+                changeimg = setInterval("auto()",3000);
+            }
+        //为小圆点设置点击效果
+        for(let i = 0;i < span.length;i++){
+                span[i].onclick = function(){
+                    clearInterval(changeimg);
+                    let temp = 2 - i;
+                    change(temp);
+                //这部分好像想错了，求纠错
+                    count = count + temp;
+                    if(count == 6) count = 1;
+                    changeimg = setInterval("auto()",3000);
+                }
+            }  
+        </script>
+    </body>
+</html>

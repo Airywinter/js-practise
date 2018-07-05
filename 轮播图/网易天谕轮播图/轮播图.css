@@ -1,0 +1,51 @@
+#wrap{
+    width: 804px;
+    overflow: hidden;
+    margin: 0px auto;
+    position: relative;
+}
+#wrap span{
+    color: white;
+    font-size: 60px;
+}
+#wrap #left{
+    position: absolute;
+    left: 10px;
+    top: 110px;
+}
+#wrap #right{
+    position: absolute;
+    right: 10px;
+    top: 110px;
+}
+#wrap #pic{
+    width: 6000px;
+    transition: all 2s;
+}
+#wrap img{
+    width: 804px;
+    float:left;
+}
+#button{
+    width: 804px;
+    position: relative;
+    margin: -30px auto;
+}
+#button .btn{
+    float: left;
+    width: 134px;
+    height: 106px;
+    background-size: auto 100%;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+#button_bottom {
+    width: 804px;
+    margin: -29px auto;
+}
+.div_bottom {
+    float: left;
+    width: 134px;
+    height: 6px;
+    background-color:#303030;
+}
